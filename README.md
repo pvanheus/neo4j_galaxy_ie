@@ -43,6 +43,6 @@ Then, [setup](https://docs.galaxyproject.org/en/master/admin/interactive_environ
 
 You should the see the image below upon firing up the IE:
 
-![Neo4j_IE](https://raw.githubusercontent.com/thobalose/galaxy_ie_neo4j/master/neo4j_ie.png)
+![Neo4j_IE](https://raw.githubusercontent.com/thobalose/neo4j_galaxy_ie/master/neo4j_ie.png)
 
 Thanks to @bgruening and @erasche.
