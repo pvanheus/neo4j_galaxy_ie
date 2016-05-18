@@ -7,9 +7,16 @@ A modified version of the Neo4j:2.3.3 Docker image to cater for the current [Gal
 **Build the image:**
 
 ```
-$ docker build -t galaxy_ie_neo4j .
+$ docker build -t thoba/neo4j_galaxy_ie .
 ```
 
+*or*
+
+**Pull the image:**
+
+```
+$ docker pull thoba/neo4j_galaxy_ie
+```
 
 *Try make sure you have nodejs `v0.10.45` and that you can run `$ node` (you might have to set a symlink)*
 
@@ -36,6 +43,6 @@ Then, [setup](https://docs.galaxyproject.org/en/master/admin/interactive_environ
 
 You should the see the image below upon firing up the IE:
 
-![Neo4j_IE](https://raw.githubusercontent.com/thobalose/neo4j_galaxy_ie/master/neo4j_ie.png)
+![Neo4j_IE](https://raw.githubusercontent.com/thobalose/galaxy_ie_neo4j/master/neo4j_ie.png)
 
 Thanks to @bgruening and @erasche.
