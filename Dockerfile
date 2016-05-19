@@ -1,7 +1,7 @@
 FROM java:openjdk-8-jre
 
 RUN apt-get update --quiet --quiet \
-    && apt-get install --quiet --quiet --no-install-recommends lsof net-tools\
+    && apt-get install --quiet --quiet --no-install-recommends lsof net-tools \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NEO4J_VERSION 2.3.3
