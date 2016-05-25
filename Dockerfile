@@ -1,5 +1,9 @@
 FROM java:openjdk-8-jre
 
+RUN useradd --system -U -u 1097 galaxy -G 1047 galaxy
+
+USER galaxy
+
 RUN apt-get update --quiet --quiet \
     && apt-get install --quiet --quiet --no-install-recommends lsof net-tools \
     && rm -rf /var/lib/apt/lists/*
