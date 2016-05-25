@@ -5,13 +5,10 @@
     # Define a volume that will be mounted into the container.
     # This is a useful way to provide access to large files in the container,
     # if the user knows ahead of time that they will need it.
-
-    # FOR TESTING
-    data_vol = ie_request.volume('${HOME}/neo4j/data', '/data', how='rw')
-
-    # When we get the required datatype
-    #data_vol = ie_request.volume(hda.file_name, '/data', how='rw')
-
+    import os
+    mount_path = str(os.path.dirname(hda.file_name)) + '/dataset_{}_files/neo4jdb'.format( hda.dataset.id )
+    data_vol = ie_request.volume(mount_path, '/data/graph.db', how='rw')
+    # data_vol = ie_request.volume('${HOME}/neo4j/data', '/data/', how='rw')
     # Add all environment variables collected from Galaxy's IE infrastructure
     # Launch the IE.
     ie_request.launch(
