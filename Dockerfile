@@ -4,11 +4,11 @@ RUN groupadd -g 1047 galaxy
 
 RUN useradd -u 1097 galaxy -g galaxy
 
-USER galaxy
 
 RUN apt-get update --quiet --quiet \
     && apt-get install --quiet --quiet --no-install-recommends lsof net-tools \
     && rm -rf /var/lib/apt/lists/*
+
 
 ENV NEO4J_VERSION 2.3.3
 ENV NEO4J_EDITION community
@@ -30,9 +30,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HISTORY_ID=none \
     REMOTE_HOST=none
 
-RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_URI \
-    && echo "$NEO4J_DOWNLOAD_SHA256 neo4j.tar.gz" | sha256sum --check --quiet - \
-    && tar --extract --file neo4j.tar.gz --directory /var/lib \
+RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_URI
+RUN echo "$NEO4J_DOWNLOAD_SHA256 neo4j.tar.gz" | sha256sum --check --quiet -
+RUN tar --extract --file neo4j.tar.gz --directory /var/lib \
     && mv /var/lib/neo4j-* /var/lib/neo4j \
     && rm neo4j.tar.gz
 
@@ -41,6 +41,10 @@ WORKDIR /var/lib/neo4j
 RUN mv data /data \
     && ln --symbolic /data
 
+
+RUN chown -R galaxy:galaxy /data
+
+USER galaxy
 
 VOLUME /import
 
@@ -51,6 +55,8 @@ ADD docker-entrypoint.sh /docker-entrypoint.sh
 ADD monitor_traffic.sh /monitor_traffic.sh
 
 EXPOSE 7474
+
+RUN id galaxy
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
