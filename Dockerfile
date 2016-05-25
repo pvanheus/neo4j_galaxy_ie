@@ -1,6 +1,6 @@
 FROM java:openjdk-8-jre
 
-RUN useradd --system -U -u 1097 galaxy -G 1047 galaxy
+RUN useradd --system -U -u 1097 galaxy -g 1047 galaxy
 
 USER galaxy
 
