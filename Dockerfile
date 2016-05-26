@@ -1,13 +1,12 @@
 FROM java:openjdk-8-jre
 
-RUN groupadd -g 1047 galaxy
-
-RUN useradd -u 1097 galaxy -g galaxy
+RUN groupadd -g 1047 galaxy \
+    && useradd -u 1097 galaxy -g galaxy
 
 RUN apt-get update --quiet --quiet \
     && apt-get install --quiet --quiet --no-install-recommends lsof net-tools \
-    && rm -rf /var/lib/apt/lists/*
-RUN mkdir /data
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir /data
 
 RUN chown -R galaxy:galaxy /opt /data
 
@@ -33,17 +32,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HISTORY_ID=none \
     REMOTE_HOST=none
 
-WORKDIR /opt
-
 RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_URI \
     && echo "$NEO4J_DOWNLOAD_SHA256 neo4j.tar.gz" | sha256sum --check --quiet - \
     && tar --extract --file neo4j.tar.gz --directory /opt \
     && mv /opt/neo4j-* /opt/neo4j \
     && rm neo4j.tar.gz
 
-WORKDIR /opt/neo4j
-
-RUN mv data /data \
+RUN mv /opt/neo4j/data /data \
     && ln --symbolic /data
 
 VOLUME /import
