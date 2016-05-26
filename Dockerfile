@@ -32,13 +32,15 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HISTORY_ID=none \
     REMOTE_HOST=none
 
+WORKDIR /opt
+
 RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_URI \
     && echo "$NEO4J_DOWNLOAD_SHA256 neo4j.tar.gz" | sha256sum --check --quiet - \
-    && tar --extract --file neo4j.tar.gz --directory /opt \
-    && mv /opt/neo4j-* /opt/neo4j \
+    && tar --extract --file neo4j.tar.gz --directory . \
+    && mv neo4j-* neo4j \
     && rm neo4j.tar.gz
 
-RUN mv /opt/neo4j/data /data \
+RUN mv neo4j/data /data \
     && ln --symbolic /data
 
 VOLUME /import
