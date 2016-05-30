@@ -47,6 +47,8 @@ VOLUME /import
 
 VOLUME /data
 
+WORKDIR /opt/neo4j
+
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 
 ADD monitor_traffic.sh /monitor_traffic.sh
