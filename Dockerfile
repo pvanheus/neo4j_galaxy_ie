@@ -40,9 +40,6 @@ RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_UR
     && mv neo4j-* neo4j \
     && rm neo4j.tar.gz
 
-RUN mv neo4j/data /data \
-    && ln --symbolic /data
-
 VOLUME /import
 
 VOLUME /data
