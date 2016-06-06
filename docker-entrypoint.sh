@@ -66,7 +66,7 @@ if [ "$1" == "neo4j" ]; then
 
     if [ ! -d /data/data ] ; then
       # if /data/data doesn't exist, initialise  it with an empty DB
-      mv /opt/neo4j/data /data && ln -s /data/data /opt/neo4j/data
+      mv data /data && ln -s /data
     fi
 
     if [ -d /plugins ]; then
