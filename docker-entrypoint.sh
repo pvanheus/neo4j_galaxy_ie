@@ -36,14 +36,14 @@ if [ "$1" == "neo4j" ]; then
         exit 1
     fi
 
+    setting "org.neo4j.server.database.location" "/data/data" neo4j-server.properties
     setting "org.neo4j.server.webserver.address" "0.0.0.0" neo4j-server.properties
     setting "org.neo4j.server.database.mode" "${NEO4J_DATABASE_MODE:-}" neo4j-server.properties
     setting "ha.server_id" "${NEO4J_SERVER_ID:-}" neo4j.properties
     setting "ha.server" "${NEO4J_HA_ADDRESS:-}:6001" neo4j.properties
     setting "ha.cluster_server" "${NEO4J_HA_ADDRESS:-}:5001" neo4j.properties
     setting "ha.initial_hosts" "${NEO4J_INITIAL_HOSTS:-}" neo4j.properties
-    setting "org.neo4j.server.database.location" "/data/data" neo4j-server.properties
-    
+
     [ -f "${EXTENSION_SCRIPT:-}" ] && . ${EXTENSION_SCRIPT}
 
     if [ -d /conf ]; then
@@ -68,12 +68,11 @@ if [ "$1" == "neo4j" ]; then
       # if /data/data doesn't exist, initialise  it with an empty DB
       mv /opt/neo4j/data /data && ln -s /data/data /opt/neo4j/data
     fi
-    
+
     if [ -d /plugins ]; then
         find /plugins -type f -exec cp {} plugins \;
     fi
-    # Launch traffic monitor which will automatically kill the container if
-    # traffic stops
+    # Launch traffic monitor which will automatically kill the container if traffic stops
     /monitor_traffic.sh &
 
     exec bin/neo4j console
