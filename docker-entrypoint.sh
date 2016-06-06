@@ -44,6 +44,7 @@ if [ "$1" == "neo4j" ]; then
     setting "ha.cluster_server" "${NEO4J_HA_ADDRESS:-}:5001" neo4j.properties
     setting "ha.initial_hosts" "${NEO4J_INITIAL_HOSTS:-}" neo4j.properties
 
+
     [ -f "${EXTENSION_SCRIPT:-}" ] && . ${EXTENSION_SCRIPT}
 
     if [ -d /conf ]; then
@@ -65,8 +66,8 @@ if [ "$1" == "neo4j" ]; then
     fi
 
     if [ ! -d /data/data ] ; then
-      # if /data/data doesn't exist, initialise  it with an empty DB
-      mv data /data && ln -s /data
+      # if /data/data doesn't exist, initialise it with an empty DB
+      mv /opt/neo4j/data /data && ln -s /data/data /opt/neo4j/data
     fi
 
     if [ -d /plugins ]; then
