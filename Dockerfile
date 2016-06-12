@@ -1,16 +1,22 @@
 FROM java:openjdk-8-jre
 
-RUN groupadd -g 1047 galaxy \
-    && useradd -u 1097 galaxy -g galaxy
-
 RUN apt-get update --quiet --quiet \
     && apt-get install --quiet --quiet --no-install-recommends lsof net-tools \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /data
 
-RUN chown -R galaxy:galaxy /opt /data
-
-USER galaxy
+ENV GOSU_VERSION 1.7
+RUN set -x \
+    && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+    && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
+    && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+    && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+    && chmod +x /usr/local/bin/gosu \
+    && gosu nobody true \
+    && apt-get purge -y --auto-remove wget
 
 ENV NEO4J_VERSION 2.3.3
 ENV NEO4J_EDITION community
@@ -34,14 +40,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 WORKDIR /opt
 
-RUN curl --fail --silent --show-error --location --output neo4j.tar.gz $NEO4J_URI \
+RUN curl --fail --show-error --location --output neo4j.tar.gz $NEO4J_URI \
     && echo "$NEO4J_DOWNLOAD_SHA256 neo4j.tar.gz" | sha256sum --check --quiet - \
     && tar --extract --file neo4j.tar.gz --directory . \
     && mv neo4j-* neo4j \
     && rm neo4j.tar.gz
-
-RUN mv neo4j/data /data \
-    && ln --symbolic /data
 
 VOLUME /import
 
@@ -50,7 +53,8 @@ VOLUME /data
 WORKDIR /opt/neo4j
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
-
+ADD run_neo4j.sh /run_neo4j.sh
+ADD set_neo4j_settings.sh /set_neo4j_settings.sh
 ADD monitor_traffic.sh /monitor_traffic.sh
 
 EXPOSE 7474
