@@ -5,7 +5,7 @@ if [ "$NEO4J_MONITOR_TRAFFIC" != "false" ] ; then
     echo "--- Monitoring Traffic ---"
     while true; do
         sleep 60
-        if [ `netstat -t | grep ESTABLISHED | grep ':7474' | wc -l` -lt 1 ]
+        if [ `netstat -t | grep -v CLOSE_WAIT | grep ':7474' | wc -l` -lt 1 ]
         then
             pkill -f 'java'
         fi

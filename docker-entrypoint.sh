@@ -14,6 +14,7 @@ if [ "$1" == "neo4j" ]; then
     if [ $(stat -c '%u' /data) -ne $NEO4J_UID -o $(stat -c '%g' /data) -ne $NEO4J_GID ] ; then
         echo "The /data volume must be owned by user ID $NEO4J_UID and group ID $NEO4J_GID" >&2
         exit 1
+
     fi
     if [ ! -d $NEO4JDB_PATH ] ; then
         # gosu $NEO4J_UID:$NEO4J_GID cp -r /opt/neo4j/data $NEO4JDB_PATH
