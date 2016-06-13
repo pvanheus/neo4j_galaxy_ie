@@ -5,7 +5,7 @@ export NEO4JDB_PATH
 
 if [ "$1" == "neo4j" ]; then
     if [ "${NEO4J_UID:=none}" = "none" -o "${NEO4J_GID:=none}" = "none" ] ; then
-        echo "You need to get the NEO4J_UID and NEO4J_GID environment variables to use this container." >&2
+        echo "You need to set the NEO4J_UID and NEO4J_GID environment variables to use this container." >&2
         exit 1
     fi
     groupadd -g $NEO4J_GID galaxy
