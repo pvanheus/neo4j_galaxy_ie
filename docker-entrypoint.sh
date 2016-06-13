@@ -8,8 +8,8 @@ if [ "$1" == "neo4j" ]; then
         echo "You need to get the NEO4J_UID and NEO4J_GID environment variables to use this container." >&2
         exit 1
     fi
-    groupadd -g $NEO4J_GID neo4j
-    useradd -u $NEO4J_UID -g neo4j neo4j
+    groupadd -g $NEO4J_GID galaxy
+    useradd -u $NEO4J_UID -g galaxy galaxy
 
     if [ $(stat -c '%u' /data) -ne $NEO4J_UID -o $(stat -c '%g' /data) -ne $NEO4J_GID ] ; then
         echo "The /data volume must be owned by user ID $NEO4J_UID and group ID $NEO4J_GID" >&2
